@@ -1,6 +1,6 @@
 # Puissance 4
 
-Une **version améliorée** d’un projet de lycée : un **Puissance 4** interactif en **Python**, utilisant **Pygame** pour l’interface graphique.
+Une **version améliorée** d’un projet de lycée : un **Puissance 4** interactif en **Python**, utilisant **Pygame** pour l’interface
 
 ---
 
