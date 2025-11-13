@@ -56,7 +56,7 @@ def ecrire_partie_terminee(f, pseudo_gagnant, couleur_gagnant):
     draw_rectangle(p1, p2, noir, f)
     
     # Texte
-    texte = f"{pseudo_gagnant} à gagné !"
+    texte = f"{pseudo_gagnant} a gagné !"
     # Centrer le texte en fonction de sa longueur
     taille_texte = len(texte) * 15
     x_texte = x + (largeur_carre - taille_texte) // 2

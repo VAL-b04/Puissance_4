@@ -4,7 +4,6 @@ pygame.init()
 from math import *
 from random import *
 
-#Variable globale d'affichage automatique
 AFFICHE_AUTO=True
 
 def affiche_auto_off():
@@ -127,13 +126,9 @@ def quit_graphics():
 def distance(point1,point2):
     return sqrt((point1[0]-point2[0])**2+(point1[1]-point2[1])**2)
 
-#Pour un nombre aleatoire entre 0 et 1 taper random()
-
-# Retourne un entier aleatoire n tel que min <= n <= max
 def alea_int(min,max):
     return randint(min,max)
 
-#variables couleur 18 principales
 vert=(0,255,0)
 rouge=(255,0,0)
 bleu=(0,0,255)
@@ -153,7 +148,6 @@ vertclair=(0,128,0)
 vertolive =(128,128,0)
 violet=(128,0,128)
 
-# 140 couleurs en anglais
 aliceblue=(240,248,255)
 antiquewhite=(250,235,215)
 aqua=(0,255,255)

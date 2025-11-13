@@ -211,7 +211,7 @@ def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
         ("Jaune", jaune, noir),
         ("Rouge", rouge, blanc),
         ("Vert", vert, noir),
-        ("Bleu", bleu, blanc),
+        ("Bleu Marine", bleumarine, blanc),
         ("Orange", orange, noir),
         ("Violet", violet, blanc),
         ("Cyan", cyan, noir),
