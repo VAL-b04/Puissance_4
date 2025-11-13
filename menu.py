@@ -31,12 +31,15 @@ def menu_pause(fenetre):
     overlay.fill((0, 0, 0))
     fenetre.blit(overlay, (0, 0))
     
-    # Titre
-    ecrire("PAUSE", (250, 150), 50, blanc, fenetre)
+    # Titre centré
+    titre_x = (largeur_fenetre - 150) // 2
+    ecrire("PAUSE", (titre_x, 150), 50, blanc, fenetre)
     
-    # Boutons
-    dessiner_bouton(fenetre, 200, 250, 300, 60, "Continuer", vert, noir)
-    dessiner_bouton(fenetre, 200, 340, 300, 60, "Retour au menu", rouge, blanc)
+    # Boutons centrés
+    bouton_largeur = 300
+    bouton_x = (largeur_fenetre - bouton_largeur) // 2
+    dessiner_bouton(fenetre, bouton_x, 250, bouton_largeur, 60, "Continuer", vert, noir)
+    dessiner_bouton(fenetre, bouton_x, 340, bouton_largeur, 60, "Retour au menu", rouge, blanc)
     
     affiche_all()
     
@@ -45,11 +48,11 @@ def menu_pause(fenetre):
         ev = pygame.event.wait()
         if ev.type == pygame.MOUSEBUTTONUP:
             # Continuer
-            if clic_dans_zone(ev.pos, 200, 250, 300, 60):
+            if clic_dans_zone(ev.pos, bouton_x, 250, bouton_largeur, 60):
                 print(f"[MENU] Continuer sélectionné")
                 return True
             # Retour au menu
-            elif clic_dans_zone(ev.pos, 200, 340, 300, 60):
+            elif clic_dans_zone(ev.pos, bouton_x, 340, bouton_largeur, 60):
                 print(f"[MENU] Retour au menu sélectionné")
                 return False
         elif ev.type == pygame.KEYDOWN and ev.key == pygame.K_ESCAPE:
@@ -73,11 +76,19 @@ def menu_fin_partie(fenetre):
     overlay.fill((0, 0, 0))
     fenetre.blit(overlay, (0, 0))
     
-    # Boutons
-    dessiner_bouton(fenetre, 150, 200, 200, 50, "Continuer", vert, noir)
-    dessiner_bouton(fenetre, 400, 200, 200, 50, "Modifier", orange, noir)
-    dessiner_bouton(fenetre, 150, 290, 200, 50, "Accueil", bleu, blanc)
-    dessiner_bouton(fenetre, 400, 290, 200, 50, "Quitter", rouge, blanc)
+    # Boutons centrés (2x2)
+    bouton_largeur = 200
+    bouton_hauteur = 50
+    espacement = 50
+    
+    # Calculer position pour centrer les 4 boutons
+    total_largeur = bouton_largeur * 2 + espacement
+    x_debut = (largeur_fenetre - total_largeur) // 2
+    
+    dessiner_bouton(fenetre, x_debut, 200, bouton_largeur, bouton_hauteur, "Continuer", vert, noir)
+    dessiner_bouton(fenetre, x_debut + bouton_largeur + espacement, 200, bouton_largeur, bouton_hauteur, "Modifier", orange, noir)
+    dessiner_bouton(fenetre, x_debut, 290, bouton_largeur, bouton_hauteur, "Accueil", bleu, blanc)
+    dessiner_bouton(fenetre, x_debut + bouton_largeur + espacement, 290, bouton_largeur, bouton_hauteur, "Quitter", rouge, blanc)
     
     affiche_all()
     
@@ -85,16 +96,16 @@ def menu_fin_partie(fenetre):
     while True:
         ev = pygame.event.wait()
         if ev.type == pygame.MOUSEBUTTONUP:
-            if clic_dans_zone(ev.pos, 150, 200, 200, 50):
+            if clic_dans_zone(ev.pos, x_debut, 200, bouton_largeur, bouton_hauteur):
                 print(f"[MENU] Continuer sélectionné")
                 return 'continuer'
-            elif clic_dans_zone(ev.pos, 400, 200, 200, 50):
+            elif clic_dans_zone(ev.pos, x_debut + bouton_largeur + espacement, 200, bouton_largeur, bouton_hauteur):
                 print(f"[MENU] Modifier sélectionné")
                 return 'modifier'
-            elif clic_dans_zone(ev.pos, 150, 290, 200, 50):
+            elif clic_dans_zone(ev.pos, x_debut, 290, bouton_largeur, bouton_hauteur):
                 print(f"[MENU] Accueil sélectionnée")
                 return 'acceuil'
-            elif clic_dans_zone(ev.pos, 400, 290, 200, 50):
+            elif clic_dans_zone(ev.pos, x_debut + bouton_largeur + espacement, 290, bouton_largeur, bouton_hauteur):
                 print(f"[MENU] Quitter sélectionné")
                 return 'quitter'
         elif ev.type == pygame.QUIT:
@@ -105,11 +116,14 @@ def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
     """Menu pour sélectionner les pseudos et couleurs des joueurs"""
     print(f"[MENU] Ouverture du menu de sélection des pseudos et couleurs")
     
+    largeur_fenetre = DIMENSION_CASE * NOMBRE_COLONNES
+    
     # Nettoyer l'écran
     fill_screen(blanc, fenetre)
     
-    # Titre
-    ecrire("PUISSANCE 4 - Selection", (150, 30), 30, noir, fenetre)
+    # Titre centré
+    titre_x = (largeur_fenetre - 400) // 2
+    ecrire("PUISSANCE 4 - Selection", (titre_x, 30), 30, noir, fenetre)
     
     # Saisie pseudo Joueur 1 si non fourni
     if pseudo_j1 is None:
@@ -140,7 +154,7 @@ def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
                 
                 # Réafficher
                 fill_screen(blanc, fenetre)
-                ecrire("PUISSANCE 4 - Selection", (150, 30), 30, noir, fenetre)
+                ecrire("PUISSANCE 4 - Selection", (titre_x, 30), 30, noir, fenetre)
                 ecrire("Joueur 1 - Entrez votre pseudo:", (50, 80), 22, noir, fenetre)
                 ecrire("(Appuyez sur ENTREE pour valider)", (50, 110), 16, gris, fenetre)
                 ecrire(pseudo_j1 + "_", (50, 150), 24, noir, fenetre)
@@ -156,7 +170,7 @@ def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
     # Saisie pseudo Joueur 2 si non fourni
     if pseudo_j2 is None:
         fill_screen(blanc, fenetre)
-        ecrire("PUISSANCE 4 - Selection", (150, 30), 30, noir, fenetre)
+        ecrire("PUISSANCE 4 - Selection", (titre_x, 30), 30, noir, fenetre)
         ecrire(f"Joueur 1: {pseudo_j1}", (50, 70), 20, noir, fenetre)
         ecrire("Joueur 2 - Entrez votre pseudo:", (50, 110), 22, noir, fenetre)
         ecrire("(Appuyez sur ENTREE pour valider)", (50, 140), 16, gris, fenetre)
@@ -185,7 +199,7 @@ def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
                 
                 # Réafficher
                 fill_screen(blanc, fenetre)
-                ecrire("PUISSANCE 4 - Selection", (150, 30), 30, noir, fenetre)
+                ecrire("PUISSANCE 4 - Selection", (titre_x, 30), 30, noir, fenetre)
                 ecrire(f"Joueur 1: {pseudo_j1}", (50, 70), 20, noir, fenetre)
                 ecrire("Joueur 2 - Entrez votre pseudo:", (50, 110), 22, noir, fenetre)
                 ecrire("(Appuyez sur ENTREE pour valider)", (50, 140), 16, gris, fenetre)
@@ -202,8 +216,9 @@ def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
     # Nettoyer l'écran pour les couleurs
     fill_screen(blanc, fenetre)
     
-    # Titre
-    ecrire("PUISSANCE 4 - Selection des couleurs", (50, 30), 30, noir, fenetre)
+    # Titre centré
+    titre_x = (largeur_fenetre - 500) // 2
+    ecrire("PUISSANCE 4 - Selection des couleurs", (titre_x, 30), 30, noir, fenetre)
     ecrire(f"{pseudo_j1} - Choisissez votre couleur:", (50, 100), 22, noir, fenetre)
     
     # Couleurs disponibles
@@ -218,14 +233,23 @@ def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
         ("Magenta", magenta, blanc)
     ]
     
-    # Dessiner les boutons de couleur pour Joueur 1
+    # Dessiner les boutons de couleur pour Joueur 1 (centrés)
     y_start = 150
+    bouton_largeur = 140
+    bouton_hauteur = 60
+    espacement_x = 20
+    
+    # 4 colonnes de boutons
+    nb_colonnes = 4
+    total_largeur = nb_colonnes * bouton_largeur + (nb_colonnes - 1) * espacement_x
+    x_debut = (largeur_fenetre - total_largeur) // 2
+    
     boutons_j1 = []
     for i, (nom, couleur, texte_couleur) in enumerate(couleurs_dispo):
-        x = 50 + (i % 4) * 160
+        x = x_debut + (i % 4) * (bouton_largeur + espacement_x)
         y = y_start + (i // 4) * 80
-        dessiner_bouton(fenetre, x, y, 140, 60, nom, couleur, texte_couleur)
-        boutons_j1.append((x, y, 140, 60, couleur, nom))
+        dessiner_bouton(fenetre, x, y, bouton_largeur, bouton_hauteur, nom, couleur, texte_couleur)
+        boutons_j1.append((x, y, bouton_largeur, bouton_hauteur, couleur, nom))
     
     affiche_all()
     
@@ -244,7 +268,7 @@ def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
     
     # Nettoyer et afficher choix Joueur 2
     fill_screen(blanc, fenetre)
-    ecrire("PUISSANCE 4 - Selection des couleurs", (50, 30), 30, noir, fenetre)
+    ecrire("PUISSANCE 4 - Selection des couleurs", (titre_x, 30), 30, noir, fenetre)
     ecrire(f"{pseudo_j1}: {nom_j1}", (50, 80), 22, couleur_j1, fenetre)
     ecrire(f"{pseudo_j2} - Choisissez votre couleur:", (50, 120), 22, noir, fenetre)
     
@@ -253,10 +277,10 @@ def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
     boutons_j2 = []
     for i, (nom, couleur, texte_couleur) in enumerate(couleurs_dispo):
         if couleur != couleur_j1:  # Interdire la même couleur
-            x = 50 + (len(boutons_j2) % 4) * 160
+            x = x_debut + (len(boutons_j2) % 4) * (bouton_largeur + espacement_x)
             y = y_start + (len(boutons_j2) // 4) * 80
-            dessiner_bouton(fenetre, x, y, 140, 60, nom, couleur, texte_couleur)
-            boutons_j2.append((x, y, 140, 60, couleur, nom))
+            dessiner_bouton(fenetre, x, y, bouton_largeur, bouton_hauteur, nom, couleur, texte_couleur)
+            boutons_j2.append((x, y, bouton_largeur, bouton_hauteur, couleur, nom))
     
     affiche_all()
     
@@ -280,19 +304,26 @@ def menu_principal(fenetre, victoires_j1, victoires_j2, parties_nulles, pseudo_j
     """Menu principal avec option nouvelle partie ou quitter"""
     print(f"[MENU] Affichage du menu principal")
     
+    largeur_fenetre = DIMENSION_CASE * NOMBRE_COLONNES
+    
     fill_screen(bleu, fenetre)
     
-    # Titre
-    ecrire("PUISSANCE 4", (200, 100), 50, jaune, fenetre)
+    # Titre centré
+    titre_x = (largeur_fenetre - 300) // 2
+    ecrire("PUISSANCE 4", (titre_x, 100), 50, jaune, fenetre)
     
-    # Afficher le score
+    # Afficher le score centré
     if victoires_j1 > 0 or victoires_j2 > 0 or parties_nulles > 0:
         score_text = f"{pseudo_j1}: {victoires_j1} - {pseudo_j2}: {victoires_j2} - Nuls: {parties_nulles}"
-        ecrire(score_text, (80, 200), 22, blanc, fenetre)
+        # Estimer la largeur du texte
+        score_x = (largeur_fenetre - len(score_text) * 11) // 2
+        ecrire(score_text, (score_x, 200), 22, blanc, fenetre)
     
-    # Boutons
-    dessiner_bouton(fenetre, 200, 280, 300, 60, "Nouvelle Partie", vert, noir)
-    dessiner_bouton(fenetre, 200, 370, 300, 60, "Quitter", rouge, blanc)
+    # Boutons centrés
+    bouton_largeur = 300
+    bouton_x = (largeur_fenetre - bouton_largeur) // 2
+    dessiner_bouton(fenetre, bouton_x, 280, bouton_largeur, 60, "Nouvelle Partie", vert, noir)
+    dessiner_bouton(fenetre, bouton_x, 370, bouton_largeur, 60, "Quitter", rouge, blanc)
     
     affiche_all()
     
@@ -301,11 +332,11 @@ def menu_principal(fenetre, victoires_j1, victoires_j2, parties_nulles, pseudo_j
         ev = pygame.event.wait()
         if ev.type == pygame.MOUSEBUTTONUP:
             # Nouvelle partie
-            if clic_dans_zone(ev.pos, 200, 280, 300, 60):
+            if clic_dans_zone(ev.pos, bouton_x, 280, bouton_largeur, 60):
                 print(f"[MENU] Nouvelle partie sélectionnée")
                 return True
             # Quitter
-            elif clic_dans_zone(ev.pos, 200, 370, 300, 60):
+            elif clic_dans_zone(ev.pos, bouton_x, 370, bouton_largeur, 60):
                 print(f"[MENU] Quitter sélectionné")
                 return False
         elif ev.type == pygame.QUIT:
