@@ -65,7 +65,7 @@ def mettre_a_jour_timer(joueur_actuel):
     
     return 0  # Pas de timeout
 
-def afficher_timers(fenetre, joueur_actuel, couleur_j1, couleur_j2):
+def afficher_timers(fenetre, joueur_actuel, couleur_j1, couleur_j2, pseudo_j1="Joueur 1", pseudo_j2="Joueur 2"):
     """Affiche les timers dans la zone console"""
     from graphiques import dessiner_zone_console
     
@@ -81,27 +81,28 @@ def afficher_timers(fenetre, joueur_actuel, couleur_j1, couleur_j2):
     secondes_j2 = int(temps_j2 % 60)
     
     # Timer Joueur 1
-    timer_text_j1 = f"J1: {minutes_j1:02d}:{secondes_j1:02d}"
+    timer_text_j1 = f"{pseudo_j1}: {minutes_j1:02d}:{secondes_j1:02d}"
     couleur_timer_j1 = couleur_j1 if joueur_actuel == 1 else gris
-    ecrire(timer_text_j1, (20, y_console + 10), 24, couleur_timer_j1, fenetre)
+    ecrire(timer_text_j1, (20, y_console + 10), 20, couleur_timer_j1, fenetre)
     
     # Timer Joueur 2
-    timer_text_j2 = f"J2: {minutes_j2:02d}:{secondes_j2:02d}"
+    timer_text_j2 = f"{pseudo_j2}: {minutes_j2:02d}:{secondes_j2:02d}"
     couleur_timer_j2 = couleur_j2 if joueur_actuel == 2 else gris
-    ecrire(timer_text_j2, (20, y_console + 45), 24, couleur_timer_j2, fenetre)
+    ecrire(timer_text_j2, (20, y_console + 45), 20, couleur_timer_j2, fenetre)
     
     # Afficher au tour de qui c'est
     couleur_actuelle = couleur_j1 if joueur_actuel == 1 else couleur_j2
-    tour_text = f"Au tour de: Joueur {joueur_actuel}"
-    ecrire(tour_text, (220, y_console + 10), 22, couleur_actuelle, fenetre)
+    pseudo_actuel = pseudo_j1 if joueur_actuel == 1 else pseudo_j2
+    tour_text = f"Au tour de: {pseudo_actuel}"
+    ecrire(tour_text, (250, y_console + 10), 22, couleur_actuelle, fenetre)
 
-def afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles):
+def afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles, pseudo_j1="Joueur 1", pseudo_j2="Joueur 2"):
     """Affiche le compteur de victoires et nulles dans la zone console"""
     y_console = DIMENSION_CASE * NOMBRE_LIGNES
     
-    # Afficher le compteur de victoires
-    score_text = f"J1: {victoires_j1} | J2: {victoires_j2} | Nuls: {parties_nulles}"
-    ecrire(score_text, (220, y_console + 45), 22, blanc, fenetre)
+    # Afficher le compteur de victoires (version abrégée pour l'espace)
+    score_text = f"{pseudo_j1[:8]}: {victoires_j1} | {pseudo_j2[:8]}: {victoires_j2} | Nuls: {parties_nulles}"
+    ecrire(score_text, (250, y_console + 45), 18, blanc, fenetre)
 
 def obtenir_temps_restant(joueur):
     """Retourne le temps restant pour un joueur donné"""

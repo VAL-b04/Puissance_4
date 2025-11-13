@@ -41,7 +41,7 @@ def dessiner_zone_console(fenetre):
     p2 = (largeur_fenetre, y_console + DIMENSION_CONSOLE_LARGEUR)
     draw_fill_rectangle(p1, p2, noir, fenetre)
 
-def ecrire_partie_terminee(f, joueur_gagnant, couleur_gagnant):
+def ecrire_partie_terminee(f, pseudo_gagnant, couleur_gagnant):
     """Affiche un message de victoire au centre de l'écran dans un gros carré"""
     # Carré au centre
     largeur_carre = 400
@@ -56,8 +56,11 @@ def ecrire_partie_terminee(f, joueur_gagnant, couleur_gagnant):
     draw_rectangle(p1, p2, noir, f)
     
     # Texte
-    texte = f"Joueur {joueur_gagnant} gagne !"
-    ecrire(texte, (x + 60, y + 40), 40, couleur_gagnant, f)
+    texte = f"{pseudo_gagnant} gagne !"
+    # Centrer le texte en fonction de sa longueur
+    taille_texte = len(texte) * 15
+    x_texte = x + (largeur_carre - taille_texte) // 2
+    ecrire(texte, (x_texte, y + 40), 40, couleur_gagnant, f)
 
 def ecrire_partie_nulle(f):
     """Affiche un message de partie nulle au centre de l'écran dans un gros carré"""

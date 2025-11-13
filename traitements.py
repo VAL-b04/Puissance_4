@@ -114,9 +114,9 @@ def verifier_nul(grille,gagnant,fenetre):
     attendre(4000)
     return True
 
-def verifier_partie(nul,gagnant,fenetre,joueur,couleur_joueur):
+def verifier_partie(nul,gagnant,fenetre,pseudo_gagnant,couleur_joueur):
     if gagnant == True:
-        ecrire_partie_terminee(fenetre, joueur, couleur_joueur)
+        ecrire_partie_terminee(fenetre, pseudo_gagnant, couleur_joueur)
         attendre(2000)
         return True
 

@@ -144,16 +144,84 @@ def menu_fin_partie(fenetre):
             print(f"[MENU] Fermeture de la fenêtre")
             return 'quitter'
 
-def menu_selection_couleurs(fenetre):
-    """Menu pour sélectionner les couleurs des joueurs"""
-    print(f"[MENU] Ouverture du menu de sélection des couleurs")
+def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
+    """Menu pour sélectionner les pseudos et couleurs des joueurs"""
+    print(f"[MENU] Ouverture du menu de sélection des pseudos et couleurs")
     
     # Nettoyer l'écran
     fill_screen(blanc, fenetre)
     
     # Titre
+    ecrire("PUISSANCE 4 - Selection", (150, 30), 30, noir, fenetre)
+    
+    # Saisie pseudo Joueur 1 si non fourni
+    if pseudo_j1 is None:
+        ecrire("Joueur 1 - Entrez votre pseudo:", (50, 80), 22, noir, fenetre)
+        ecrire("(Appuyez sur ENTREE pour valider)", (50, 110), 16, gris, fenetre)
+        affiche_all()
+        
+        pseudo_j1 = ""
+        saisie_terminee = False
+        
+        while not saisie_terminee:
+            ev = pygame.event.wait()
+            if ev.type == pygame.KEYDOWN:
+                if ev.key == pygame.K_RETURN and len(pseudo_j1) > 0:
+                    saisie_terminee = True
+                elif ev.key == pygame.K_BACKSPACE:
+                    pseudo_j1 = pseudo_j1[:-1]
+                elif ev.unicode.isprintable() and len(pseudo_j1) < 15:
+                    pseudo_j1 += ev.unicode
+                
+                # Réafficher
+                fill_screen(blanc, fenetre)
+                ecrire("PUISSANCE 4 - Selection", (150, 30), 30, noir, fenetre)
+                ecrire("Joueur 1 - Entrez votre pseudo:", (50, 80), 22, noir, fenetre)
+                ecrire("(Appuyez sur ENTREE pour valider)", (50, 110), 16, gris, fenetre)
+                ecrire(pseudo_j1 + "_", (50, 150), 24, noir, fenetre)
+                affiche_all()
+        
+        print(f"[MENU] Pseudo Joueur 1: {pseudo_j1}")
+    
+    # Saisie pseudo Joueur 2 si non fourni
+    if pseudo_j2 is None:
+        fill_screen(blanc, fenetre)
+        ecrire("PUISSANCE 4 - Selection", (150, 30), 30, noir, fenetre)
+        ecrire(f"Joueur 1: {pseudo_j1}", (50, 70), 20, noir, fenetre)
+        ecrire("Joueur 2 - Entrez votre pseudo:", (50, 110), 22, noir, fenetre)
+        ecrire("(Appuyez sur ENTREE pour valider)", (50, 140), 16, gris, fenetre)
+        affiche_all()
+        
+        pseudo_j2 = ""
+        saisie_terminee = False
+        
+        while not saisie_terminee:
+            ev = pygame.event.wait()
+            if ev.type == pygame.KEYDOWN:
+                if ev.key == pygame.K_RETURN and len(pseudo_j2) > 0:
+                    saisie_terminee = True
+                elif ev.key == pygame.K_BACKSPACE:
+                    pseudo_j2 = pseudo_j2[:-1]
+                elif ev.unicode.isprintable() and len(pseudo_j2) < 15:
+                    pseudo_j2 += ev.unicode
+                
+                # Réafficher
+                fill_screen(blanc, fenetre)
+                ecrire("PUISSANCE 4 - Selection", (150, 30), 30, noir, fenetre)
+                ecrire(f"Joueur 1: {pseudo_j1}", (50, 70), 20, noir, fenetre)
+                ecrire("Joueur 2 - Entrez votre pseudo:", (50, 110), 22, noir, fenetre)
+                ecrire("(Appuyez sur ENTREE pour valider)", (50, 140), 16, gris, fenetre)
+                ecrire(pseudo_j2 + "_", (50, 180), 24, noir, fenetre)
+                affiche_all()
+        
+        print(f"[MENU] Pseudo Joueur 2: {pseudo_j2}")
+    
+    # Nettoyer l'écran pour les couleurs
+    fill_screen(blanc, fenetre)
+    
+    # Titre
     ecrire("PUISSANCE 4 - Selection des couleurs", (50, 30), 30, noir, fenetre)
-    ecrire("Joueur 1 - Choisissez votre couleur:", (50, 100), 22, noir, fenetre)
+    ecrire(f"{pseudo_j1} - Choisissez votre couleur:", (50, 100), 22, noir, fenetre)
     
     # Couleurs disponibles
     couleurs_dispo = [
@@ -188,14 +256,14 @@ def menu_selection_couleurs(fenetre):
                 if clic_dans_zone(ev.pos, x, y, w, h):
                     couleur_j1 = couleur
                     nom_j1 = nom
-                    print(f"[MENU] Joueur 1 a choisi: {nom_j1}")
+                    print(f"[MENU] {pseudo_j1} a choisi: {nom_j1}")
                     break
     
     # Nettoyer et afficher choix Joueur 2
     fill_screen(blanc, fenetre)
     ecrire("PUISSANCE 4 - Selection des couleurs", (50, 30), 30, noir, fenetre)
-    ecrire(f"Joueur 1: {nom_j1}", (50, 80), 22, couleur_j1, fenetre)
-    ecrire("Joueur 2 - Choisissez votre couleur:", (50, 120), 22, noir, fenetre)
+    ecrire(f"{pseudo_j1}: {nom_j1}", (50, 80), 22, couleur_j1, fenetre)
+    ecrire(f"{pseudo_j2} - Choisissez votre couleur:", (50, 120), 22, noir, fenetre)
     
     # Dessiner les boutons pour Joueur 2 (sans la couleur du Joueur 1)
     y_start = 170
@@ -219,13 +287,13 @@ def menu_selection_couleurs(fenetre):
                 if clic_dans_zone(ev.pos, x, y, w, h):
                     couleur_j2 = couleur
                     nom_j2 = nom
-                    print(f"[MENU] Joueur 2 a choisi: {nom_j2}")
+                    print(f"[MENU] {pseudo_j2} a choisi: {nom_j2}")
                     break
     
-    print(f"[MENU] Couleurs sélectionnées - J1: {nom_j1}, J2: {nom_j2}")
-    return couleur_j1, couleur_j2
+    print(f"[MENU] Couleurs sélectionnées - {pseudo_j1}: {nom_j1}, {pseudo_j2}: {nom_j2}")
+    return couleur_j1, couleur_j2, pseudo_j1, pseudo_j2
 
-def menu_principal(fenetre, victoires_j1, victoires_j2, parties_nulles):
+def menu_principal(fenetre, victoires_j1, victoires_j2, parties_nulles, pseudo_j1="Joueur 1", pseudo_j2="Joueur 2"):
     """Menu principal avec option nouvelle partie ou quitter"""
     print(f"[MENU] Affichage du menu principal")
     
@@ -236,8 +304,8 @@ def menu_principal(fenetre, victoires_j1, victoires_j2, parties_nulles):
     
     # Afficher le score
     if victoires_j1 > 0 or victoires_j2 > 0 or parties_nulles > 0:
-        score_text = f"Score: J1: {victoires_j1} - J2: {victoires_j2} - Nuls: {parties_nulles}"
-        ecrire(score_text, (120, 200), 25, blanc, fenetre)
+        score_text = f"{pseudo_j1}: {victoires_j1} - {pseudo_j2}: {victoires_j2} - Nuls: {parties_nulles}"
+        ecrire(score_text, (80, 200), 22, blanc, fenetre)
     
     # Boutons
     dessiner_bouton(fenetre, 200, 280, 300, 60, "Nouvelle Partie", vert, noir)

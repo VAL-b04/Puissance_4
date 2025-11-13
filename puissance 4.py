@@ -16,10 +16,14 @@ print(f"[INIT] Fenêtre créée: {DIMENSION_CASE*NOMBRE_COLONNES}x{DIMENSION_CAS
 victoires_j1 = 0
 victoires_j2 = 0
 parties_nulles = 0
+pseudo_j1 = "Joueur 1"
+pseudo_j2 = "Joueur 2"
 print(f"[INIT] Compteur de victoires initialisé: J1={victoires_j1}, J2={victoires_j2}, Nuls={parties_nulles}")
 
 # Boucle principale du jeu
 continuer_jeu = True
+couleur_j1 = None
+couleur_j2 = None
 
 while continuer_jeu:
     print("\n" + "="*50)
@@ -27,15 +31,18 @@ while continuer_jeu:
     print("="*50)
     
     # Afficher le menu principal
-    continuer_jeu = menu_principal(fenetre, victoires_j1, victoires_j2, parties_nulles)
+    continuer_jeu = menu_principal(fenetre, victoires_j1, victoires_j2, parties_nulles, pseudo_j1, pseudo_j2)
     
     if not continuer_jeu:
         print(f"[JEU] Fin du jeu demandée")
         break
     
-    # Sélection des couleurs
-    print(f"[JEU] Lancement de la sélection des couleurs")
-    couleur_j1, couleur_j2 = menu_selection_couleurs(fenetre)
+    # Sélection des couleurs et pseudos (uniquement si pas encore définis)
+    if couleur_j1 is None or couleur_j2 is None:
+        print(f"[JEU] Lancement de la sélection des pseudos et couleurs")
+        couleur_j1, couleur_j2, pseudo_j1, pseudo_j2 = menu_selection_couleurs(fenetre)
+    else:
+        print(f"[JEU] Utilisation des couleurs et pseudos existants: {pseudo_j1} vs {pseudo_j2}")
     
     # Initialiser la grille
     grille = [[0,0,0,0,0,0], \
@@ -61,8 +68,8 @@ while continuer_jeu:
     print(f"[JEU] Grille dessinée")
     
     # Afficher timer et score initial
-    afficher_timers(fenetre, joueur, couleur_j1, couleur_j2)
-    afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles)
+    afficher_timers(fenetre, joueur, couleur_j1, couleur_j2, pseudo_j1, pseudo_j2)
+    afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles, pseudo_j1, pseudo_j2)
     
     # Boucle de jeu
     partie_terminee = False
@@ -84,8 +91,8 @@ while continuer_jeu:
             partie_terminee = True
         
         # Afficher le timer mis à jour
-        afficher_timers(fenetre, joueur, couleur_j1, couleur_j2)
-        afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles)
+        afficher_timers(fenetre, joueur, couleur_j1, couleur_j2, pseudo_j1, pseudo_j2)
+        afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles, pseudo_j1, pseudo_j2)
         
         # Attendre un événement avec timeout
         evenement = None
@@ -121,8 +128,8 @@ while continuer_jeu:
                                 dessiner_pion(i+1, j, couleur_j1, fenetre)
                             elif grille[i][j] == 2:
                                 dessiner_pion(i+1, j, couleur_j2, fenetre)
-                    afficher_timers(fenetre, joueur, couleur_j1, couleur_j2)
-                    afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles)
+                    afficher_timers(fenetre, joueur, couleur_j1, couleur_j2, pseudo_j1, pseudo_j2)
+                    afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles, pseudo_j1, pseudo_j2)
                 else:
                     # Retour au menu - réinitialiser les compteurs
                     print(f"[EVENT] Retour au menu principal - RAZ des compteurs")
@@ -162,24 +169,25 @@ while continuer_jeu:
             print(f"[JEU] Vérification partie nulle: {partie_nulle}")
             
             # Vérifier si la partie est terminée
-            partie_terminee = verifier_partie(partie_nulle, gagnant, fenetre, joueur, couleur_pion)
+            pseudo_actuel = pseudo_j1 if joueur == 1 else pseudo_j2
+            partie_terminee = verifier_partie(partie_nulle, gagnant, fenetre, pseudo_actuel, couleur_pion)
             print(f"[JEU] Partie terminée: {partie_terminee}")
             
             if gagnant:
                 if joueur == 1:
                     victoires_j1 += 1
-                    print(f"[SCORE] Victoire Joueur 1! Score: J1={victoires_j1}, J2={victoires_j2}")
+                    print(f"[SCORE] Victoire {pseudo_j1}! Score: {pseudo_j1}={victoires_j1}, {pseudo_j2}={victoires_j2}")
                 else:
                     victoires_j2 += 1
-                    print(f"[SCORE] Victoire Joueur 2! Score: J1={victoires_j1}, J2={victoires_j2}")
+                    print(f"[SCORE] Victoire {pseudo_j2}! Score: {pseudo_j1}={victoires_j1}, {pseudo_j2}={victoires_j2}")
                 
                 # Mettre à jour le score affiché
-                afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles)
+                afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles, pseudo_j1, pseudo_j2)
             
             if partie_nulle:
                 parties_nulles += 1
                 print(f"[SCORE] Partie nulle! Nuls={parties_nulles}")
-                afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles)
+                afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles, pseudo_j1, pseudo_j2)
             
             # Alterner les joueurs
             ancien_joueur = joueur
@@ -203,15 +211,15 @@ while continuer_jeu:
         if gagnant_timeout > 0:
             if gagnant_timeout == 1:
                 victoires_j1 += 1
-                print(f"[SCORE] Victoire Joueur 1 par timeout! Score: J1={victoires_j1}, J2={victoires_j2}")
-                ecrire("Joueur 1 gagne par timeout!", (180, DIMENSION_CASE*NOMBRE_LIGNES + 70), 25, jaune, fenetre)
+                print(f"[SCORE] Victoire {pseudo_j1} par timeout! Score: {pseudo_j1}={victoires_j1}, {pseudo_j2}={victoires_j2}")
+                ecrire(f"{pseudo_j1} gagne par timeout!", (150, DIMENSION_CASE*NOMBRE_LIGNES + 70), 22, jaune, fenetre)
             else:
                 victoires_j2 += 1
-                print(f"[SCORE] Victoire Joueur 2 par timeout! Score: J1={victoires_j1}, J2={victoires_j2}")
-                ecrire("Joueur 2 gagne par timeout!", (180, DIMENSION_CASE*NOMBRE_LIGNES + 70), 25, rouge, fenetre)
+                print(f"[SCORE] Victoire {pseudo_j2} par timeout! Score: {pseudo_j1}={victoires_j1}, {pseudo_j2}={victoires_j2}")
+                ecrire(f"{pseudo_j2} gagne par timeout!", (150, DIMENSION_CASE*NOMBRE_LIGNES + 70), 22, rouge, fenetre)
             
-            afficher_timers(fenetre, joueur, couleur_j1, couleur_j2)
-            afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles)
+            afficher_timers(fenetre, joueur, couleur_j1, couleur_j2, pseudo_j1, pseudo_j2)
+            afficher_score(fenetre, victoires_j1, victoires_j2, parties_nulles, pseudo_j1, pseudo_j2)
             attendre(3000)
         
         # Menu de fin de partie (sauf si on a quitté)
@@ -219,16 +227,19 @@ while continuer_jeu:
             choix = menu_fin_partie(fenetre)
             
             if choix == 'continuer':
-                print(f"[MENU] Continuer - Nouvelle partie avec mêmes couleurs")
-                # La boucle va recommencer avec les mêmes couleurs
+                print(f"[MENU] Continuer - Nouvelle partie avec mêmes couleurs et pseudos")
+                # La boucle va recommencer avec les mêmes couleurs et pseudos
             elif choix == 'modifier':
-                print(f"[MENU] Modifier les couleurs")
-                couleur_j1, couleur_j2 = menu_selection_couleurs(fenetre)
+                print(f"[MENU] Modifier les couleurs et pseudos")
+                couleur_j1, couleur_j2, pseudo_j1, pseudo_j2 = menu_selection_couleurs(fenetre, pseudo_j1, pseudo_j2)
             elif choix == 'nouveau':
-                print(f"[MENU] Nouvelle partie - RAZ des compteurs")
+                print(f"[MENU] Nouvelle partie - RAZ des compteurs et retour au menu")
                 victoires_j1 = 0
                 victoires_j2 = 0
                 parties_nulles = 0
+                couleur_j1 = None
+                couleur_j2 = None
+                # Ne pas réinitialiser les pseudos, ils seront redemandés
             elif choix == 'quitter':
                 print(f"[MENU] Quitter le jeu")
                 continuer_jeu = False
@@ -238,6 +249,6 @@ while continuer_jeu:
 # Fin du programme
 print("="*50)
 print("FIN DU JEU PUISSANCE 4")
-print(f"Score final: Joueur 1: {victoires_j1} - Joueur 2: {victoires_j2} - Nuls: {parties_nulles}")
+print(f"Score final: {pseudo_j1}: {victoires_j1} - {pseudo_j2}: {victoires_j2} - Nuls: {parties_nulles}")
 print("="*50)
 quit_graphics()
