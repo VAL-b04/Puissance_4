@@ -232,14 +232,16 @@ while continuer_jeu:
             elif choix == 'modifier':
                 print(f"[MENU] Modifier les couleurs et pseudos")
                 couleur_j1, couleur_j2, pseudo_j1, pseudo_j2 = menu_selection_couleurs(fenetre, pseudo_j1, pseudo_j2)
-            elif choix == 'nouveau':
-                print(f"[MENU] Nouvelle partie - RAZ des compteurs et retour au menu")
+            elif choix == 'acceuil':
+                print(f"[MENU] Retour à l'accueil - RAZ complète")
                 victoires_j1 = 0
                 victoires_j2 = 0
                 parties_nulles = 0
                 couleur_j1 = None
                 couleur_j2 = None
-                # Ne pas réinitialiser les pseudos, ils seront redemandés
+                pseudo_j1 = "Joueur 1"
+                pseudo_j2 = "Joueur 2"
+                # La boucle continue et va afficher le menu principal
             elif choix == 'quitter':
                 print(f"[MENU] Quitter le jeu")
                 continuer_jeu = False

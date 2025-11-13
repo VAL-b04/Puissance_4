@@ -60,51 +60,8 @@ def menu_pause(fenetre):
             print(f"[MENU] Fermeture de la fenêtre")
             return False
 
-def menu_pause(fenetre):
-    """Menu de pause - Retourne True pour continuer, False pour retour au menu"""
-    print(f"[MENU] Ouverture du menu de pause")
-    
-    # Semi-transparence: dessiner un rectangle gris semi-transparent
-    largeur_fenetre = DIMENSION_CASE * NOMBRE_COLONNES
-    hauteur_fenetre = DIMENSION_CASE * NOMBRE_LIGNES + DIMENSION_CONSOLE_LARGEUR
-    
-    # Créer une surface semi-transparente
-    overlay = pygame.Surface((largeur_fenetre, hauteur_fenetre))
-    overlay.set_alpha(180)
-    overlay.fill((0, 0, 0))
-    fenetre.blit(overlay, (0, 0))
-    
-    # Titre
-    ecrire("PAUSE", (250, 150), 50, blanc, fenetre)
-    
-    # Boutons
-    dessiner_bouton(fenetre, 200, 250, 300, 60, "Continuer", vert, noir)
-    dessiner_bouton(fenetre, 200, 340, 300, 60, "Retour au menu", rouge, blanc)
-    
-    affiche_all()
-    
-    # Attendre choix
-    while True:
-        ev = pygame.event.wait()
-        if ev.type == pygame.MOUSEBUTTONUP:
-            # Continuer
-            if clic_dans_zone(ev.pos, 200, 250, 300, 60):
-                print(f"[MENU] Continuer sélectionné")
-                return True
-            # Retour au menu
-            elif clic_dans_zone(ev.pos, 200, 340, 300, 60):
-                print(f"[MENU] Retour au menu sélectionné")
-                return False
-        elif ev.type == pygame.KEYDOWN and ev.key == pygame.K_ESCAPE:
-            # ESC pour continuer
-            print(f"[MENU] ESC pour continuer")
-            return True
-        elif ev.type == pygame.QUIT:
-            print(f"[MENU] Fermeture de la fenêtre")
-            return False
-
 def menu_fin_partie(fenetre):
-    """Menu de fin de partie - Retourne 'continuer', 'modifier', 'nouveau', ou 'quitter'"""
+    """Menu de fin de partie - Retourne 'continuer', 'modifier', 'acceuil', ou 'quitter'"""
     print(f"[MENU] Ouverture du menu de fin de partie")
     
     # Semi-transparence
@@ -119,7 +76,7 @@ def menu_fin_partie(fenetre):
     # Boutons
     dessiner_bouton(fenetre, 150, 200, 200, 50, "Continuer", vert, noir)
     dessiner_bouton(fenetre, 400, 200, 200, 50, "Modifier", orange, noir)
-    dessiner_bouton(fenetre, 150, 290, 200, 50, "Nouvelle partie", bleu, blanc)
+    dessiner_bouton(fenetre, 150, 290, 200, 50, "Accueil", bleu, blanc)
     dessiner_bouton(fenetre, 400, 290, 200, 50, "Quitter", rouge, blanc)
     
     affiche_all()
@@ -135,8 +92,8 @@ def menu_fin_partie(fenetre):
                 print(f"[MENU] Modifier sélectionné")
                 return 'modifier'
             elif clic_dans_zone(ev.pos, 150, 290, 200, 50):
-                print(f"[MENU] Nouvelle partie sélectionnée")
-                return 'nouveau'
+                print(f"[MENU] Accueil sélectionnée")
+                return 'acceuil'
             elif clic_dans_zone(ev.pos, 400, 290, 200, 50):
                 print(f"[MENU] Quitter sélectionné")
                 return 'quitter'
@@ -162,14 +119,22 @@ def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
         
         pseudo_j1 = ""
         saisie_terminee = False
+        message_erreur = ""
         
         while not saisie_terminee:
             ev = pygame.event.wait()
             if ev.type == pygame.KEYDOWN:
                 if ev.key == pygame.K_RETURN and len(pseudo_j1) > 0:
-                    saisie_terminee = True
+                    # Vérifier si le pseudo est valide
+                    if pseudo_est_valide(pseudo_j1):
+                        saisie_terminee = True
+                        message_erreur = ""
+                    else:
+                        message_erreur = "Pseudo interdit ! Choisissez-en un autre."
+                        print(f"[MENU] Pseudo interdit: {pseudo_j1}")
                 elif ev.key == pygame.K_BACKSPACE:
                     pseudo_j1 = pseudo_j1[:-1]
+                    message_erreur = ""
                 elif ev.unicode.isprintable() and len(pseudo_j1) < 15:
                     pseudo_j1 += ev.unicode
                 
@@ -179,6 +144,11 @@ def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
                 ecrire("Joueur 1 - Entrez votre pseudo:", (50, 80), 22, noir, fenetre)
                 ecrire("(Appuyez sur ENTREE pour valider)", (50, 110), 16, gris, fenetre)
                 ecrire(pseudo_j1 + "_", (50, 150), 24, noir, fenetre)
+                
+                # Afficher message d'erreur si présent
+                if message_erreur:
+                    ecrire(message_erreur, (50, 190), 18, rouge, fenetre)
+                
                 affiche_all()
         
         print(f"[MENU] Pseudo Joueur 1: {pseudo_j1}")
@@ -194,14 +164,22 @@ def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
         
         pseudo_j2 = ""
         saisie_terminee = False
+        message_erreur = ""
         
         while not saisie_terminee:
             ev = pygame.event.wait()
             if ev.type == pygame.KEYDOWN:
                 if ev.key == pygame.K_RETURN and len(pseudo_j2) > 0:
-                    saisie_terminee = True
+                    # Vérifier si le pseudo est valide
+                    if pseudo_est_valide(pseudo_j2):
+                        saisie_terminee = True
+                        message_erreur = ""
+                    else:
+                        message_erreur = "Pseudo interdit ! Choisissez-en un autre."
+                        print(f"[MENU] Pseudo interdit: {pseudo_j2}")
                 elif ev.key == pygame.K_BACKSPACE:
                     pseudo_j2 = pseudo_j2[:-1]
+                    message_erreur = ""
                 elif ev.unicode.isprintable() and len(pseudo_j2) < 15:
                     pseudo_j2 += ev.unicode
                 
@@ -212,6 +190,11 @@ def menu_selection_couleurs(fenetre, pseudo_j1=None, pseudo_j2=None):
                 ecrire("Joueur 2 - Entrez votre pseudo:", (50, 110), 22, noir, fenetre)
                 ecrire("(Appuyez sur ENTREE pour valider)", (50, 140), 16, gris, fenetre)
                 ecrire(pseudo_j2 + "_", (50, 180), 24, noir, fenetre)
+                
+                # Afficher message d'erreur si présent
+                if message_erreur:
+                    ecrire(message_erreur, (50, 220), 18, rouge, fenetre)
+                
                 affiche_all()
         
         print(f"[MENU] Pseudo Joueur 2: {pseudo_j2}")
