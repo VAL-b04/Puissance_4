@@ -8,7 +8,7 @@ Une **version améliorée** d’un projet de lycée : un **Puissance 4** interac
 
 ```bash
 # Cloner le dépôt
-git clone https://github.com/your-username/Puissance_4.git
+git clone https://github.com/VAL-b04/Puissance_4
 cd Puissance_4
 
 # Installer les dépendances
@@ -26,3 +26,4 @@ python3 "puissance 4.py"
 # Lancer le jeu
 python ".\puissance 4.py"
 ```
+
