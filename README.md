@@ -13,17 +13,8 @@ cd Puissance_4
 
 # Installer les dépendances
 pip install pygame
-```
 
-### Bash
-```bash
 # Lancer le jeu
-python3 "puissance 4.py"
-```
-
-### Powershell
-```bash
-# Lancer le jeu
-python ".\puissance 4.py"
+python3 "puissance_4.py"
 ```
 
